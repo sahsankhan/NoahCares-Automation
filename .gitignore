@@ -1,0 +1,53 @@
+# Node.js dependencies
+node_modules/
+package-lock.json
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+
+# Logs
+logs/
+*.log
+logs/*.log
+report.log
+debug.log
+
+# WebdriverIO specific
+.allure-results/
+allure-report/
+.reporter-output/
+.wdio/
+.wdio-*
+wdio-report/
+wdio-logs/
+reports/
+coverage/
+
+# Environment & local configs
+.env
+.env.local
+.env.test
+.env.development
+.env.production
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Cache
+.cache/
+.tmp/
+*.apk
+
+git init
+git add .
+git commit -m "Initial Commit"
+git branch -M main
+git remote add origin https://github.com/sahsankhan/NoahCares-Automation.git
+git push -u origin main
