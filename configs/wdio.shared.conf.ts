@@ -1,5 +1,6 @@
 import type { Options } from '@wdio/types';
 import dotenv from 'dotenv';
+import { join } from 'path';
 
 dotenv.config();
 
@@ -32,13 +33,11 @@ export const config: Options.Testrunner = {
   ],
 
   cucumberOpts: {
-    require: [
-      './src/hooks.ts',
-      './src/step_definitions/mobile_android/**/*.ts',
-      './src/step_definitions/mobile_iOS/**/*.ts',
-      './src/step_definitions/web/**/*.ts',
-    ],
-    // Removed requireModule: ['ts-node/register'] - Use tsx for native TS support
-    timeout: 120000,
-  },
+  require: [
+    'src/hooks.ts',
+    'src/support/steps.ts',
+  ],
+  requireModule: ['ts-node/register/transpile-only'],
+  timeout: 120000,
+},
 };

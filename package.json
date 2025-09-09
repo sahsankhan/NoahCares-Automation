@@ -26,6 +26,7 @@
     "appium-uiautomator2-driver": "^5.0.0",
     "appium-xcuitest-driver": "^10.0.4",
     "dotenv": "^17.2.1",
+    "ts-node": "^10.9.2",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
   },
