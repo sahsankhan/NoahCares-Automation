@@ -1,60 +1,61 @@
-import { BeforeAll, AfterAll, Before, After } from '@cucumber/cucumber'
-import { driver, browser } from '@wdio/globals'
-import fs from 'fs'
-import path from 'path'
-
+import { BeforeAll, AfterAll, Before, After } from '@wdio/cucumber-framework';
+import type { ITestCaseHookParameter } from '@cucumber/cucumber';
+import fs from 'fs';
+import path from 'path';
 
 BeforeAll(async () => {
-  console.log('Starting test execution...')
-})
+  console.log('Starting test execution...');
+});
 
-Before(async function (scenario) {
-  console.log(`Starting scenario: ${scenario.pickle.name}`)
+Before(async function (this: ITestCaseHookParameter) {
+  console.log(`Starting scenario: ${this.pickle.name}`);
 
   if (browser.isMobile) {
-    console.log('Running on mobile device...')
-    await driver.execute('mobile: activateApp', {
-      appId: process.env.ANDROID_APP_PACKAGE || process.env.IOS_APP_PACKAGE,
-    })
+    console.log('Running on mobile device...');
+    // Differentiate appId (Android) vs bundleId (iOS)
+    const appParams = browser.capabilities.platformName?.toLowerCase() === 'ios'
+      ? { bundleId: process.env.IOS_APP_PACKAGE || 'com.noahcare' }
+      : { appId: process.env.ANDROID_APP_PACKAGE || 'com.noahcare' };
+    await browser.execute('mobile: activateApp', appParams);
   } else {
-    console.log('Running on web browser...')
-    await browser.url(process.env.WEB_BASE_URL || 'https://example.com')
+    console.log('Running on web browser...');
+    await browser.url(process.env.WEB_BASE_URL || 'https://example.com');
   }
-})
+});
 
-After(async function (scenario) {
-  if (scenario.result?.status === 'FAILED') {
-    console.log(`Scenario failed: ${scenario.pickle.name}`)
+After(async function (this: ITestCaseHookParameter) {
+  if (this.result?.status === 'FAILED') {
+    console.log(`Scenario failed: ${this.pickle.name}`);
 
-    const screenshot = browser.isMobile
-      ? await driver.takeScreenshot()
-      : await browser.takeScreenshot()
+    const screenshot = await browser.takeScreenshot();
 
     const screenshotPath = path.join(
       process.cwd(),
       'screenshots',
       `${Date.now()}.png`
-    )
+    );
 
-    fs.writeFileSync(screenshotPath, screenshot, 'base64')
-    console.log(`Screenshot saved at: ${screenshotPath}`)
+    fs.writeFileSync(screenshotPath, screenshot, 'base64');
+    console.log(`Screenshot saved at: ${screenshotPath}`);
   } else {
-    console.log(`Scenario passed: ${scenario.pickle.name}`)
+    console.log(`Scenario passed: ${this.pickle.name}`);
   }
-})
+});
 
 AfterAll(async () => {
-  console.log('Test execution finished. Cleaning up...')
+  console.log('Test execution finished. Cleaning up...');
 
   if (browser.isMobile) {
     try {
-      await driver.execute('mobile: terminateApp', {
-        appId: process.env.ANDROID_APP_PACKAGE || process.env.IOS_APP_PACKAGE,
-      })
+      // Differentiate appId (Android) vs bundleId (iOS)
+      const appParams = browser.capabilities.platformName?.toLowerCase() === 'ios'
+        ? { bundleId: process.env.IOS_APP_PACKAGE || 'com.noahcare' }
+        : { appId: process.env.ANDROID_APP_PACKAGE || 'com.noahcare' };
+      await browser.execute('mobile: terminateApp', appParams);
     } catch (err) {
-      console.warn('Could not terminate mobile app:', err)
+      console.warn('Could not terminate mobile app:', err);
     }
   } else {
-    await browser.deleteSession()
+    await browser.deleteSession();
   }
-})
+});

@@ -1,7 +1,7 @@
-import type { Options } from '@wdio/types'
-import dotenv from 'dotenv'
+import type { Options } from '@wdio/types';
+import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 
 export const config: Options.Testrunner = {
   runner: 'local',
@@ -38,7 +38,7 @@ export const config: Options.Testrunner = {
       './src/step_definitions/mobile_iOS/**/*.ts',
       './src/step_definitions/web/**/*.ts',
     ],
-    requireModule: ['ts-node/register'],
+    // Removed requireModule: ['ts-node/register'] - Use tsx for native TS support
     timeout: 120000,
   },
-}
+};
