@@ -127,6 +127,83 @@ class LoginPage {
         const deepXpath = '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.RelativeLayout[2]';
         return $(deepXpath);
     }
+
+    /**
+     * Sidebar trigger/header area at the top of the home screen.
+     * Primary: UiSelector instance(47). Fallback: provided deep xpath.
+     */
+    async getSidebarHeaderArea() {
+        // Keep this method as a broader header area if needed elsewhere
+        const byUi47 = await $('android=new UiSelector().className("android.view.ViewGroup").instance(47)');
+        if (await byUi47.isExisting()) return byUi47;
+        const deepXpath = '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]';
+        return $(deepXpath);
+    }
+
+    /**
+     * Logout button inside the sidebar drawer.
+     * If role is 'Driver', prefer UiSelector instance(119). Otherwise, prefer instance(115).
+     * Falls back to deep XPath if needed.
+     */
+    async getLogoutButtonInDrawer(role?: string) {
+        const normalizedRole = (role || '').toLowerCase();
+
+        if (normalizedRole === 'driver') {
+            const byUi119 = await $('android=new UiSelector().className("android.view.ViewGroup").instance(119)');
+            if (await byUi119.isExisting()) return byUi119;
+        }
+
+        const byUi115 = await $('android=new UiSelector().className("android.view.ViewGroup").instance(115)');
+        if (await byUi115.isExisting()) return byUi115;
+
+        if (normalizedRole === 'driver') {
+            const byUi119 = await $('android=new UiSelector().className("android.view.ViewGroup").instance(119)');
+            if (await byUi119.isExisting()) return byUi119;
+        }
+
+        const deepXpath = '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup[3]/android.view.ViewGroup[2]';
+        return $(deepXpath);
+    }
+
+    /**
+     * Logout confirmation button in bottom sheet.
+     * Primary: UiSelector instance(57). Fallback: provided xpath.
+     */
+    async getLogoutConfirmButton() {
+        const byUi = await $('android=new UiSelector().className("android.view.ViewGroup").instance(71)');
+        if (await byUi.isExisting()) return byUi;
+        const xpath = '//android.widget.SeekBar[@content-desc="Bottom Sheet"]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup[1]';
+        return $(xpath);
+    }
+
+    /**
+     * Hamburger menu button in the header (opens sidebar).
+     * Primary: UiSelector instance(45) which is clickable. Fallback: deep xpath path you provided.
+     */
+    async getHamburgerMenuButton() {
+        const byUi45 = await $('android=new UiSelector().className("android.view.ViewGroup").instance(45)');
+        if (await byUi45.isExisting()) return byUi45;
+        const deepXpath = '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]';
+        return $(deepXpath);
+    }
+
+    /**
+     * Driver-specific hamburger menu button (instance 33)
+     */
+    async getDriverHamburgerMenuButton() {
+        const byUi33 = await $('android=new UiSelector().className("android.view.ViewGroup").instance(33)');
+        if (await byUi33.isExisting()) return byUi33;
+        return this.getHamburgerMenuButton();
+    }
+
+    /**
+     * Aid Monitor-specific hamburger menu button (instance 33)
+     */
+    async getAidMonitorHamburgerMenuButton() {
+        const byUi33 = await $('android=new UiSelector().className("android.view.ViewGroup").instance(33)');
+        if (await byUi33.isExisting()) return byUi33;
+        return this.getHamburgerMenuButton();
+    }
 }
 
 export default new LoginPage();

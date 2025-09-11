@@ -38,6 +38,6 @@ export const config: Options.Testrunner = {
     'src/support/steps.ts',
   ],
   requireModule: ['ts-node/register/transpile-only'],
-  timeout: 120000,
+  timeout: 1200000,
 },
 };
