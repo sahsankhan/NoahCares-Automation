@@ -9,7 +9,7 @@ Feature: Login on Android app
     Then I should be on the login screen
 
   Scenario: Successful login with valid credentials and logout
-    When I log in with email "newclient@yopmail.com" and password "Tribute2020!"
+    When I log in with email "newclient6@yopmail.com" and password "Tribute2020!"
     Then I should be logged in successfully
     When I open the sidebar
     And I tap the Logout button

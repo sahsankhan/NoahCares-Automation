@@ -1,6 +1,42 @@
 import { $ } from '@wdio/globals';
 
 class SignupPage {
+	// ---------- Private Locators ----------
+
+	private signupBtnUi = $('android=new UiSelector().text("Sign up")');
+	private signupBtnXpath = $(`//android.widget.TextView[@text="Sign up"]`);
+
+	private firstNameInputUi = $('android=new UiSelector().text("Enter first name")');
+	private firstNameInputXpath = $(`//android.widget.EditText[@text="Enter first name"]`);
+
+	private lastNameInputUi = $('android=new UiSelector().text("Enter last name")');
+	private lastNameInputXpath = $(`//android.widget.EditText[@text="Enter last name"]`);
+
+	private emailInputUi = $('android=new UiSelector().text("Enter email address")');
+	private emailInputXpath = $(`//android.widget.EditText[@text="Enter email address"]`);
+
+	private passwordInputUi = $('android=new UiSelector().text("Enter password").instance(0)');
+	private passwordInputXpath = $(`(//android.widget.EditText[@text="Enter password"])[1]`);
+
+	private confirmPasswordInputUi = $('android=new UiSelector().text("Enter password")');
+	private confirmPasswordInputXpath = $(`//android.widget.EditText[@text="Enter password"]`);
+
+	private phoneInputUi = $('android=new UiSelector().text("Enter phone number")');
+	private phoneInputXpath = $(`//android.widget.EditText[@text="Enter phone number"]`);
+
+	private checkboxGlyphUi = $('android=new UiSelector().text("")');
+	private checkboxGlyphFallback = $(`//android.widget.TextView[@text=""]`);
+
+	private signupAsRiderUi = $('android=new UiSelector().text("Sign Up as Rider")');
+	private signupAsRiderFallback = $(`//android.widget.TextView[@text="Sign Up as Rider"]`);
+
+	private signupLogoUi = $('android=new UiSelector().className("android.view.ViewGroup").instance(34)');
+	private signupLogoXpath = $('//android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup');
+
+	private streetdropdown = $('android=new UiSelector().className("android.view.ViewGroup").instance(48)');
+
+	// ---------- Public Getters (Unchanged Names) ----------
+
 	/** Return element by exact visible text */
 	async getElementByText(text: string) {
 		return $(`//*[@text="${text}"]`);
@@ -11,63 +47,57 @@ class SignupPage {
 		return $(`//android.widget.TextView[@text="${text}"]`);
 	}
 
-	/** First name input */
+	async getstreetdropdown() {
+       return this.streetdropdown;
+	}
+	async getSignupButton() {
+		if (await this.signupBtnUi.isExisting()) return this.signupBtnUi;
+		return this.signupBtnXpath;
+	}
+
 	async getFirstNameInput() {
-		const ui = await $('android=new UiSelector().text("Enter first name")');
-		if (await ui.isExisting()) return ui;
-		return $(`//android.widget.EditText[@text="Enter first name"]`);
+		if (await this.firstNameInputUi.isExisting()) return this.firstNameInputUi;
+		return this.firstNameInputXpath;
 	}
 
-	/** Last name input */
 	async getLastNameInput() {
-		const ui = await $('android=new UiSelector().text("Enter last name")');
-		if (await ui.isExisting()) return ui;
-		return $(`//android.widget.EditText[@text="Enter last name"]`);
+		if (await this.lastNameInputUi.isExisting()) return this.lastNameInputUi;
+		return this.lastNameInputXpath;
 	}
 
-	/** Email input */
 	async getEmailInput() {
-		const ui = await $('android=new UiSelector().text("Enter email address")');
-		if (await ui.isExisting()) return ui;
-		return $(`//android.widget.EditText[@text="Enter email address"]`);
+		if (await this.emailInputUi.isExisting()) return this.emailInputUi;
+		return this.emailInputXpath;
 	}
 
-	/** Password inputs (two instances). Provide index 0 or 1. */
-	async getPasswordInput(instanceIndex: 0 | 1 = 0) {
-		const byUi = await $(`android=new UiSelector().text("Enter password").instance(${instanceIndex})`);
-		if (await byUi.isExisting()) return byUi;
-		// Fallback: nth match of EditText with same text
-		const nth = instanceIndex + 1;
-		return $(`(//android.widget.EditText[@text="Enter password"][${nth}])`);
+	async getPasswordInput() {
+		if (await this.passwordInputUi.isExisting()) return this.passwordInputUi;
+		return this.passwordInputXpath;
 	}
 
-	/** Phone number input */
+	async getConfirmPasswordInput() {
+		if (await this.confirmPasswordInputUi.isExisting()) return this.confirmPasswordInputUi;
+		return this.confirmPasswordInputXpath;
+	}
+
 	async getPhoneInput() {
-		const ui = await $('android=new UiSelector().text("Enter phone number")');
-		if (await ui.isExisting()) return ui;
-		return $(`//android.widget.EditText[@text="Enter phone number"]`);
+		if (await this.phoneInputUi.isExisting()) return this.phoneInputUi;
+		return this.phoneInputXpath;
 	}
 
-	/** Checkbox glyph (appears as special TextView character) */
 	async getCheckboxGlyph() {
-		const ui = await $('android=new UiSelector().text("")');
-		if (await ui.isExisting()) return ui;
-		return this.getTextViewByText('');
+		if (await this.checkboxGlyphUi.isExisting()) return this.checkboxGlyphUi;
+		return this.checkboxGlyphFallback;
 	}
 
-	/** Sign Up as Rider button */
 	async getSignupAsRiderButton() {
-		const ui = await $('android=new UiSelector().text("Sign Up as Rider")');
-		if (await ui.isExisting()) return ui;
-		return this.getTextViewByText('Sign Up as Rider');
+		if (await this.signupAsRiderUi.isExisting()) return this.signupAsRiderUi;
+		return this.signupAsRiderFallback;
 	}
 
-	/** Verify Signup page logo/container using given className+instance and xpath fallback */
 	async getSignupLogoContainer() {
-		const byUi = await $('android=new UiSelector().className("android.view.ViewGroup").instance(34)');
-		if (await byUi.isExisting()) return byUi;
-		const byXpath = await $('//android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup');
-		return byXpath;
+		if (await this.signupLogoUi.isExisting()) return this.signupLogoUi;
+		return this.signupLogoXpath;
 	}
 }
 

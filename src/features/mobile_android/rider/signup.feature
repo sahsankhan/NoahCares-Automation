@@ -11,7 +11,7 @@ Feature: Signup as Rider on Android app
   Scenario Outline: Successful Signup AS Rider with valid credentials
     When I click the signup button
     Then I should see the signup page
-    When I sign up with first name "Ahsan", last name "Khan", email "ahs@yopmail.com", password "ahs123!@#1"
+    When I sign up with first name "Ahsan", last name "Khan", email "newahspclaut80@yopmail.com", password "Aahs123456!@#1" , phone number 7027064712
     And click the checkbox
     And click the signup as rider button
     Then I successfully be signed in

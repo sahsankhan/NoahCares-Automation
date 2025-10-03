@@ -4,9 +4,28 @@ import SignupPage from '../../../page_object/android_mobile/Signup_Locator';
 import LoginPage from '../../../page_object/android_mobile/Login_Locator';
 
 // Parameterized step for entering signup details
+When('I click the signup button',async()=>{
+	const signupBtn=await SignupPage.getSignupButton();
+	await signupBtn.waitForDisplayed({timeout:15000});
+	await signupBtn.click();
+});
+
+Then('I should see the signup page', async () => { 
+	const logo = await SignupPage.getSignupLogoContainer();
+	await logo.waitForDisplayed({ timeout: 15000 });
+	expect(await logo.isDisplayed(), 'Signup page logo/container not visible').to.be.true;
+});
+var GfirstName: string;
+var GlastName: string;
+
+
 When(
-	'I sign up with first name {string}, last name {string}, email {string}, password {string}',
-	async (firstName: string, lastName: string, email: string, password: string) => {
+	'I sign up with first name {string}, last name {string}, email {string}, password {string} , phone number {int}',
+	async (firstName: string, lastName: string, email: string, password: string ,phone: number) => {
+		
+		GfirstName=firstName;
+		GlastName=lastName;
+		
 		const firstNameInput = await SignupPage.getFirstNameInput();
 		await firstNameInput.waitForDisplayed({ timeout: 15000 });
 		await firstNameInput.setValue(firstName);
@@ -19,11 +38,15 @@ When(
 		await emailInput.waitForDisplayed({ timeout: 15000 });
 		await emailInput.setValue(email);
 
-		const pwdInput1 = await SignupPage.getPasswordInput(0);
+		const phoneInput = await SignupPage.getPhoneInput();
+		await phoneInput.waitForDisplayed({ timeout: 15000 });
+		await phoneInput.setValue(phone); // Static valid phone number
+
+		const pwdInput1 = await SignupPage.getPasswordInput();
 		await pwdInput1.waitForDisplayed({ timeout: 15000 });
 		await pwdInput1.setValue(password);
 
-		const pwdInput2 = await SignupPage.getPasswordInput(1);
+		const pwdInput2 = await SignupPage.getConfirmPasswordInput();
 		await pwdInput2.waitForDisplayed({ timeout: 15000 });
 		await pwdInput2.setValue(password);
 	}
@@ -43,11 +66,11 @@ When('I enter the valid credentials', async () => {
 	await emailInput.waitForDisplayed({ timeout: 15000 });
 	await emailInput.setValue('john.doe@email.com');
 
-	const pwdInput1 = await SignupPage.getPasswordInput(0);
+	const pwdInput1 = await SignupPage.getPasswordInput();;
 	await pwdInput1.waitForDisplayed({ timeout: 15000 });
 	await pwdInput1.setValue('Test@123');
 
-	const pwdInput2 = await SignupPage.getPasswordInput(1);
+	const pwdInput2 = await SignupPage.getConfirmPasswordInput();;
 	await pwdInput2.waitForDisplayed({ timeout: 15000 });
 	await pwdInput2.setValue('Test@123');
 
@@ -63,15 +86,16 @@ When('click the checkbox', async () => {
 });
 
 When('click the signup as rider button', async () => {
+	
+	const click1= await SignupPage.getElementByText(GfirstName);
+	await click1.waitForDisplayed({ timeout: 20000 });
+	await click1.click();
+	const click2= await SignupPage.getElementByText(GlastName);
+	await click2.waitForDisplayed({ timeout: 20000 });
+	await click2.click();
 	const signupBtn = await SignupPage.getSignupAsRiderButton();
-	await signupBtn.waitForDisplayed({ timeout: 15000 });
+	await signupBtn.waitForDisplayed({ timeout: 20000 });
 	await signupBtn.click();
-});
-
-Then('I should see the signup page', async () => {
-	const logo = await SignupPage.getSignupLogoContainer();
-	await logo.waitForDisplayed({ timeout: 15000 });
-	expect(await logo.isDisplayed(), 'Signup page logo/container not visible').to.be.true;
 });
 
 Then('I successfully be signed in', async () => {
